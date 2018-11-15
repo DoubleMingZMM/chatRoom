@@ -6,11 +6,171 @@
 </head>
 <link rel="stylesheet" href="styles/index.css" type="text/css"/>
 <link rel="stylesheet" href="styles/normalize.css" type="text/css"/>
+<style type="text/css">
+    html{
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+        overflow: hidden;
+        background-color: #DDDDDD;
+    }
+
+    .chatcontent{
+        display: flex;
+        width: 950px;
+        height: 600px;
+        background-color: white;
+        box-shadow: 0 1px 20px rgba(0,0,0,.2);
+        border-radius: 20px;
+        overflow: hidden;
+    }
+
+    .left{
+        width: 30%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #f7f7f7;
+    }
+
+    .right{
+        display: flex;
+        width: 70%;
+        height: 100%;
+        flex-direction: column;
+        /*background-image: url("../imgs/background.png");*/
+        background-image: url(http://tool.uixsj.cn/qchan/uploads/2018/08/traffic_a_lot_of_cars_driving_across_the_golden_gate_bridge_free_stock_photos_picjumbo_HNCK2899_2210x1474.jpg);
+        background-size: cover;
+    }
+
+    .sculpture{
+        display: flex;
+        height: 40%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sculpture img{
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+
+    .nickname{
+        display: flex;
+        height: 10%;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        font-weight: bolder;
+    }
+
+    .basic{
+        height: 40%;
+
+        padding: 15px;
+    }
+
+    .basic p{
+        word-break: break-all;
+    }
+
+    .chatheader{
+        display: flex;
+        width: 100%;
+        height: 50px;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        font-weight: bolder;
+        opacity: .3;
+        background: #DDDDDD;
+    }
+
+    .chatarea{
+        display: flex;
+        height: 500px;
+        padding: 15px 10px;
+    }
+
+    .chatfooter{
+        display: flex;
+        width: 100%;
+        height: 50px;
+    }
+
+    .chatfooter input:first-child{
+        width: 85%;
+        border: 0;
+        outline: none;
+        padding: 10px;
+        font-size: 18px;
+    }
+
+    .chatfooter input:last-child{
+        width: 15%;
+        border: 0;
+        outline: none;
+        font-size: 20px;
+        font-weight: bolder;
+        cursor: pointer;
+        background: darkgoldenrod;
+    }
+
+    .message-self{
+        width: 100%;
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-end;
+    }
+
+    .message-others{
+
+    }
+
+    .message-container {
+        max-width: 80%;
+        height: auto;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .message-wrap{
+        margin-right: 10px;
+        width: 100%;
+        word-break: break-all;
+    }
+
+    .mesage-icon img{
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    .message-chat{
+        background-color: red;
+        padding: 10px;
+        border-radius: 8px;
+    }
+
+    .message-name{
+        display: flex;
+        justify-content: flex-end;
+        opacity: .7;
+    }
+</style>
 <body>
 <div class="chatcontent">
     <div class="left">
         <div class="sculpture">
-            <img src="imgs/sculpture.jpg">
+            <!--<img src="imgs/sculpture.jpg">-->
+            <img src="https://i.niupic.com/images/2018/08/10/5yxS.jpg">
         </div>
         <div class="nickname">Daniel</div>
         <div class="basic">
@@ -29,7 +189,8 @@
                         <div class="message-chat">这是我发送的内容</div>
                     </div>
                     <div class="mesage-icon">
-                        <img src="imgs/sculpture.jpg" />
+                        <!--<img src="imgs/sculpture.jpg" />-->
+                        <img src="https://i.niupic.com/images/2018/08/10/5yxS.jpg">
                     </div>
                 </div>
             </div>
