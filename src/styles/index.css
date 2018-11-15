@@ -133,6 +133,8 @@ html{
 
 .message-wrap{
     margin-right: 10px;
+    width: 100%;
+    word-break: break-all;
 }
 
 .mesage-icon img{
