@@ -127,7 +127,7 @@ io.on("connection", function(socket) {
 
     //	 监听到连接断开
     socket.on("disconnect", function() {
-        count--;
+        --count;
         console.log(name + "离开了群聊")
         io.emit("disconnection", {
             count: count,
@@ -138,4 +138,4 @@ io.on("connection", function(socket) {
 });
 
 // 服务器监听端口
-server.listen(9999, "172.17.5.205");
+server.listen(8888, "172.17.5.205");
