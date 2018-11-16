@@ -60,13 +60,15 @@
     }
 
     .nickname{
-        display: flex;
-        height: 10%;
-        width: 100%;
-        justify-content: center;
-        align-items: center;
+        height: 50px;
+        line-height: 50px;
         font-size: 30px;
         font-weight: bolder;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        padding: 0 30px;
+        text-align: center;
     }
 
     .basic{
@@ -92,15 +94,18 @@
     }
 
     .chatarea{
-        display: flex;
-        height: 500px;
+        /*display: flex;*/
+        height: 480px;
         padding: 15px 10px;
+        flex-direction: column;
+        overflow-y: scroll;
+        overflow-x: hidden;
     }
 
     .chatfooter{
         display: flex;
         width: 100%;
-        height: 50px;
+        height: 70px;
     }
 
     .chatfooter input:first-child{
@@ -122,16 +127,20 @@
     }
 
     .message-self{
-        width: 100%;
         height: fit-content;
         display: flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: flex-end;
+        padding: 10px;
     }
 
     .message-others{
-
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 10px;
     }
 
     .message-container {
@@ -141,10 +150,21 @@
         flex-direction: row;
     }
 
-    .message-wrap{
+    .message-wrap-self{
         margin-right: 10px;
         width: 100%;
         word-break: break-all;
+        /*display: flex;
+        flex-direction: column;*/
+        text-align: -webkit-right;
+    }
+
+    .message-wrap-others{
+        margin-left: 10px;
+        width: 100%;
+        word-break: break-all;
+        /*display: flex;
+        flex-direction: column;*/
     }
 
     .mesage-icon img{
@@ -153,16 +173,54 @@
         border-radius: 50%;
     }
 
-    .message-chat{
-        background-color: red;
-        padding: 10px;
+    .message-chat-self{
+        display: flex;
+        width: fit-content;
+        background-color: #4ace4a;
+        padding: 8px 10px;
         border-radius: 8px;
     }
 
-    .message-name{
+    .message-chat-others{
         display: flex;
-        justify-content: flex-end;
+        width: fit-content;
+        background-color: #9ca09c;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .message-name-self{
         opacity: .7;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: right;
+        width: 80px;
+    }
+
+    .message-name-others{
+        opacity: .7;
+        width: 80px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    .right .chatarea::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    .right .chatarea::-webkit-scrollbar-thumb {
+        border-radius: 2rem;
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); 
+        background-color: #AAAAAA;
+    }
+
+    .right .chatarea::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); 
+        border-radius: 2rem;
+        background-color: transparent; 
     }
 </style>
 <body>
@@ -172,7 +230,7 @@
             <!--<img src="imgs/sculpture.jpg">-->
             <img src="https://i.niupic.com/images/2018/08/10/5yxS.jpg">
         </div>
-        <div class="nickname">Daniel</div>
+        <div class="nickname" id="nickname">Daniel</div>
         <div class="basic">
             <p>性别：男</p>
             <p>账户 ID：1602268076</p>
@@ -180,26 +238,98 @@
         </div>
     </div>
     <div class="right">
-        <div class="chatheader"><span>聊天室</span></div>
-        <div class="chatarea">
-            <div class="message-self">
+        <div class="chatheader">聊天室（<span id="counter">0</span>）</div>
+        <div class="chatarea" id="chatarea">
+            <!--<div class="message-self">
                 <div class="message-container">
-                    <div class="message-wrap">
-                        <div class="message-name">daniel</div>
-                        <div class="message-chat">这是我发送的内容</div>
+                    <div class="message-wrap-self">
+                        <div class="message-name-self">daniel</div>
+                        <div class="message-chat-self">这是我发送的内容</div>
                     </div>
                     <div class="mesage-icon">
-                        <!--<img src="imgs/sculpture.jpg" />-->
+                        &lt;!&ndash;<img src="imgs/sculpture.jpg" />&ndash;&gt;
                         <img src="https://i.niupic.com/images/2018/08/10/5yxS.jpg">
                     </div>
                 </div>
-            </div>
+            </div>-->
         </div>
         <div class="chatfooter">
             <input type="text" name="chatInput" id="chatInput" placeholder="开启你的聊天之旅吧。。。">
-            <input type="submit" name="chatEnter" id="chatEnter" value="发射">
+            <input type="submit" name="chatEnter" id="chatEnter" value="发射" onclick="sendMessage()">
         </div>
     </div>
 </div>
+<script src="http://wulv5.com/js/socket.io.min.js"></script>
+<script>
+    const socket = io.connect()
+
+    var name = ''
+
+    getName()
+
+    function scrollToBottom() {
+        var chatarea = document.getElementById("chatarea")
+        chatarea.scrollTop = chatarea.scrollHeight
+    }
+
+    function getName() {
+        const str = prompt("请输入你的名字", "")
+        if(str) {
+            name = str
+            document.getElementById('nickname').innerText = str
+            const message = {
+                name: name
+            }
+            socket.emit("join", message)
+        } else {
+            getName()
+        }
+    }
+
+    // 接收到系统通知
+    socket.on("joinNoticeSelf", function(message) {
+        document.getElementById('counter').innerText = message.count
+    })
+
+    // 接收到系统通知
+    socket.on("joinNoticeOther", function(message) {
+        document.getElementById('counter').innerText = message.count
+    })
+    
+    socket.on("message", function(message) {
+        console.log(message)
+        let html = ''
+
+        if(name === message.name) {
+            html = "<div class='message-self'><div class='message-container'><div class='message-wrap-self'><div class='message-name-self'>" + message.name + "</div><div class='message-chat-self'>" + message.value + "</div></div><div class='mesage-icon'><img src='https://i.niupic.com/images/2018/08/10/5yxS.jpg'></div></div></div>"
+        } else {
+            html = "<div class='message-others'><div class='message-container'><div class='mesage-icon'><img src='https://i.niupic.com/images/2018/08/10/5yxS.jpg'></div><div class='message-wrap-others'><div class='message-name-others'>" + message.name + "</div><div class='message-chat-others'>" + message.value + "</div></div></div></div>"
+        }
+        document.getElementById('chatarea').appendChild(document.createRange().createContextualFragment(html))
+        scrollToBottom()
+    })
+
+    function sendMessage() {
+        const inputStr = document.getElementById("chatInput").value
+        if (!name) getName()
+        if (!inputStr) return false
+        const message = {
+            name: name,
+            value: inputStr
+        }
+        socket.send(message)
+        document.getElementById("chatInput").value = ""
+        scrollToBottom()
+    }
+
+    //回车事件
+    document.getElementById('chatInput').onkeydown = function (event) {
+        var e = event || window.event
+        if (e && e.keyCode == 13) { //回车键的键值为13
+            sendMessage()
+        }
+    }
+
+</script>
 </body>
 </html>

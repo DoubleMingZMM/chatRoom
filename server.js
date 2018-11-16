@@ -120,7 +120,7 @@ io.on("connection", function(socket) {
 
     // 接收客户端所发送的信息
     socket.on("message", function(message) {
-        console.log(message);
+        // console.log(message);
         // 向所有客户端广播发布的消息
         io.emit("message", message);
     });
@@ -138,4 +138,4 @@ io.on("connection", function(socket) {
 });
 
 // 服务器监听端口
-server.listen(9999);
+server.listen(9999, "172.17.5.205");
