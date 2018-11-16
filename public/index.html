@@ -169,6 +169,21 @@
         flex-wrap: nowrap;
         padding: 10px;
     }
+    
+    .notify-container{
+        height: fit-content;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        padding: 10px;
+        justify-content: center;
+    }
+    
+    .notify{
+        background: #DDDDDD;
+        opacity: .7;
+        padding: 0 5px;
+    }
 
     .message-container {
         max-width: 80%;
@@ -270,23 +285,10 @@
                 聊天室（<span id="counter">0</span>）
             </div>
             <div class="headerclose">
-                <button id="close" class="close" onclick="close()">X</button>
+                <button id="close" class="close" onclick="closeChat()">X</button>
             </div>
         </div>
-        <div class="chatarea" id="chatarea">
-            <!--<div class="message-self">
-                <div class="message-container">
-                    <div class="message-wrap-self">
-                        <div class="message-name-self">daniel</div>
-                        <div class="message-chat-self">这是我发送的内容</div>
-                    </div>
-                    <div class="mesage-icon">
-                        &lt;!&ndash;<img src="imgs/sculpture.jpg" />&ndash;&gt;
-                        <img src="https://i.niupic.com/images/2018/08/10/5yxS.jpg">
-                    </div>
-                </div>
-            </div>-->
-        </div>
+        <div class="chatarea" id="chatarea"></div>
         <div class="chatfooter">
             <input type="text" name="chatInput" id="chatInput" placeholder="开启你的聊天之旅吧。。。">
             <input type="submit" name="chatEnter" id="chatEnter" value="发射" onclick="sendMessage()">
@@ -328,11 +330,21 @@
     // 接收到系统通知
     socket.on("joinNoticeOther", function(message) {
         document.getElementById('counter').innerText = message.count
+        var notice = {
+            name: message.name,
+            action: '加入群聊，并且亲了Daniel一口'
+        }
+        notify(notice)
     })
 
     // 断开连接回调事件
     socket.on("disconnection", function(message) {
         document.getElementById('counter').innerText = message.count
+        var notice = {
+            name: message.name,
+            action: '退出群聊，并且放了一个屁'
+        }
+        notify(notice)
     })
     
     socket.on("message", function(message) {
@@ -348,10 +360,9 @@
         scrollToBottom()
     })
     
-    function close() {
-        console.log(6666666666)
+    function closeChat() {
         if (confirm('确定退出群聊吗？') === true) {
-            socket.on("disconnection")
+            socket.emit("disconnect")
         }
     }
 
@@ -365,6 +376,12 @@
         }
         socket.send(message)
         document.getElementById("chatInput").value = ""
+        scrollToBottom()
+    }
+
+    function notify(message) {
+        const notify = "<div class='notify-container'><div class='notify'><span class='name'>"+ message.name +"</span><span>" + message.action + "</span></div></div>"
+        document.getElementById('chatarea').appendChild(document.createRange().createContextualFragment(notify))
         scrollToBottom()
     }
 

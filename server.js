@@ -75,6 +75,7 @@ let totalCount = 0;
 
 // 创建一个web服务器
 const server = http.createServer(function(request, response) {
+    request.setE
     response.writeHead(200, {
         "Content-Type": "text/html;charset=UTF-8"
     });
@@ -138,4 +139,4 @@ io.on("connection", function(socket) {
 });
 
 // 服务器监听端口
-server.listen(8888, "172.17.5.205");
+server.listen(9999, "172.17.5.205");
